@@ -9,7 +9,9 @@ import { Badge } from "@/components/ui/badge"
 import { Search, MapPin, Calendar, CheckCircle2, Clock, AlertCircle } from "lucide-react"
 import { getIncidentStatus } from "./actions"
 
-export default function TrackPage() {
+import { Suspense } from "react"
+
+function TrackPageContent() {
     const searchParams = useSearchParams()
     const router = useRouter()
     const initialId = searchParams.get("id") || ""
@@ -90,8 +92,8 @@ export default function TrackPage() {
                                         </CardDescription>
                                     </div>
                                     <Badge className={`text-lg px-4 py-1 ${incident.status === 'DONE' ? 'bg-green-500' :
-                                            incident.status === 'IN_PROGRESS' ? 'bg-blue-500' :
-                                                'bg-yellow-500'
+                                        incident.status === 'IN_PROGRESS' ? 'bg-blue-500' :
+                                            'bg-yellow-500'
                                         }`}>
                                         {incident.status}
                                     </Badge>
@@ -164,5 +166,13 @@ export default function TrackPage() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function TrackPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
+            <TrackPageContent />
+        </Suspense>
     )
 }

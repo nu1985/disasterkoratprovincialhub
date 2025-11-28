@@ -15,14 +15,23 @@ import {
 import { Button } from "@/components/ui/button"
 import { useI18n } from "@/components/i18n-provider"
 
-export function DashboardSidebar() {
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Menu } from "lucide-react"
+import { useState } from "react"
+
+interface DashboardSidebarProps {
+    mobile?: boolean
+}
+
+export function DashboardSidebar({ mobile }: DashboardSidebarProps) {
     const pathname = usePathname()
     const { t } = useI18n()
+    const [open, setOpen] = useState(false)
 
     const isActive = (path: string) => pathname === path
 
-    return (
-        <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col fixed h-full">
+    const SidebarContent = () => (
+        <div className="flex flex-col h-full bg-slate-900 text-white">
             <div className="p-6 border-b border-slate-800">
                 <h1 className="text-xl font-bold flex items-center gap-2">
                     <AlertTriangle className="text-red-500" />
@@ -30,8 +39,8 @@ export function DashboardSidebar() {
                 </h1>
             </div>
 
-            <nav className="flex-1 p-4 space-y-2">
-                <Link href="/dashboard">
+            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+                <Link href="/dashboard" onClick={() => setOpen(false)}>
                     <Button
                         variant="ghost"
                         className={`w-full justify-start ${isActive('/dashboard') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
@@ -40,7 +49,7 @@ export function DashboardSidebar() {
                         {t('dashboard.menu.overview')}
                     </Button>
                 </Link>
-                <Link href="/dashboard/incidents">
+                <Link href="/dashboard/incidents" onClick={() => setOpen(false)}>
                     <Button
                         variant="ghost"
                         className={`w-full justify-start ${isActive('/dashboard/incidents') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
@@ -49,7 +58,7 @@ export function DashboardSidebar() {
                         {t('dashboard.menu.incidents')}
                     </Button>
                 </Link>
-                <Link href="/dashboard/assignments">
+                <Link href="/dashboard/assignments" onClick={() => setOpen(false)}>
                     <Button
                         variant="ghost"
                         className={`w-full justify-start ${isActive('/dashboard/assignments') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
@@ -58,7 +67,7 @@ export function DashboardSidebar() {
                         {t('dashboard.menu.assignments')}
                     </Button>
                 </Link>
-                <Link href="/dashboard/map">
+                <Link href="/dashboard/map" onClick={() => setOpen(false)}>
                     <Button
                         variant="ghost"
                         className={`w-full justify-start ${isActive('/dashboard/map') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
@@ -67,7 +76,7 @@ export function DashboardSidebar() {
                         {t('dashboard.menu.map')}
                     </Button>
                 </Link>
-                <Link href="/dashboard/users">
+                <Link href="/dashboard/users" onClick={() => setOpen(false)}>
                     <Button
                         variant="ghost"
                         className={`w-full justify-start ${isActive('/dashboard/users') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
@@ -76,7 +85,7 @@ export function DashboardSidebar() {
                         {t('dashboard.menu.users')}
                     </Button>
                 </Link>
-                <Link href="/dashboard/resources">
+                <Link href="/dashboard/resources" onClick={() => setOpen(false)}>
                     <Button
                         variant="ghost"
                         className={`w-full justify-start ${isActive('/dashboard/resources') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
@@ -85,7 +94,7 @@ export function DashboardSidebar() {
                         {t('dashboard.menu.resources')}
                     </Button>
                 </Link>
-                <Link href="/dashboard/settings">
+                <Link href="/dashboard/settings" onClick={() => setOpen(false)}>
                     <Button
                         variant="ghost"
                         className={`w-full justify-start ${isActive('/dashboard/settings') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
@@ -113,6 +122,27 @@ export function DashboardSidebar() {
                     </Button>
                 </Link>
             </div>
+        </div>
+    )
+
+    if (mobile) {
+        return (
+            <Sheet open={open} onOpenChange={setOpen}>
+                <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-white hover:bg-slate-800">
+                        <Menu className="h-6 w-6" />
+                    </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="p-0 border-r-slate-800 w-72 bg-slate-900 text-white border-none">
+                    <SidebarContent />
+                </SheetContent>
+            </Sheet>
+        )
+    }
+
+    return (
+        <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col fixed h-full">
+            <SidebarContent />
         </aside>
     )
 }

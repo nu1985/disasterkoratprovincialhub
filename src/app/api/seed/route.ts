@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs'
 
 export async function GET() {
     try {
-        console.log('Start seeding via API ...')
+
 
         // 1. Create Roles
         const roles = ['ADMIN', 'STAFF', 'VOLUNTEER']

@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { AlertTriangle, CheckCircle2, Clock } from "lucide-react"
@@ -23,6 +25,15 @@ const COLORS = ['#ef4444', '#f97316', '#eab308', '#3b82f6', '#8b5cf6'];
 
 export default function DashboardClient({ stats, chartData, recentActivity }: DashboardProps) {
     const { t, language } = useI18n()
+    const router = useRouter()
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            router.refresh()
+        }, 30000) // Refresh every 30 seconds
+
+        return () => clearInterval(interval)
+    }, [router])
 
     return (
         <div className="space-y-8">

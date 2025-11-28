@@ -85,7 +85,8 @@ export async function createAssignment(prevState: any, formData: FormData) {
         if (!validatedFields.success) {
             return {
                 success: false,
-                message: validatedFields.error.errors[0].message,
+                errors: validatedFields.error.flatten().fieldErrors,
+                message: "Invalid input",
             }
         }
 

@@ -37,47 +37,49 @@ export default function ResourcesClient({ resources, organizations }: ResourcesC
                     <CardTitle>{t('resources.listTitle')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>{t('resources.table.name')}</TableHead>
-                                <TableHead>{t('resources.table.type')}</TableHead>
-                                <TableHead>{t('resources.table.capacity')}</TableHead>
-                                <TableHead>{t('resources.table.status')}</TableHead>
-                                <TableHead>{t('resources.table.organization')}</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {resources?.map((resource) => (
-                                <TableRow key={resource.id}>
-                                    <TableCell className="font-medium">{resource.name}</TableCell>
-                                    <TableCell>
-                                        <Badge variant="outline">
-                                            {t(`resources.types.${resource.resourceType}` as any) || resource.resourceType}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>{resource.capacity || '-'}</TableCell>
-                                    <TableCell>
-                                        <Badge className={
-                                            resource.status === 'AVAILABLE' ? 'bg-green-500' :
-                                                resource.status === 'IN_USE' ? 'bg-blue-500' :
-                                                    'bg-yellow-500'
-                                        }>
-                                            {t(`resources.statuses.${resource.status}` as any) || resource.status}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>{resource.organization?.name || '-'}</TableCell>
-                                </TableRow>
-                            ))}
-                            {(!resources || resources.length === 0) && (
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
                                 <TableRow>
-                                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                                        No resources found
-                                    </TableCell>
+                                    <TableHead>{t('resources.table.name')}</TableHead>
+                                    <TableHead>{t('resources.table.type')}</TableHead>
+                                    <TableHead>{t('resources.table.capacity')}</TableHead>
+                                    <TableHead>{t('resources.table.status')}</TableHead>
+                                    <TableHead>{t('resources.table.organization')}</TableHead>
                                 </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {resources?.map((resource) => (
+                                    <TableRow key={resource.id}>
+                                        <TableCell className="font-medium">{resource.name}</TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline">
+                                                {t(`resources.types.${resource.resourceType}` as any) || resource.resourceType}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>{resource.capacity || '-'}</TableCell>
+                                        <TableCell>
+                                            <Badge className={
+                                                resource.status === 'AVAILABLE' ? 'bg-green-500' :
+                                                    resource.status === 'IN_USE' ? 'bg-blue-500' :
+                                                        'bg-yellow-500'
+                                            }>
+                                                {t(`resources.statuses.${resource.status}` as any) || resource.status}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>{resource.organization?.name || '-'}</TableCell>
+                                    </TableRow>
+                                ))}
+                                {(!resources || resources.length === 0) && (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                                            No resources found
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
         </div>

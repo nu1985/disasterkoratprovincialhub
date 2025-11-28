@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
     Table,
     TableBody,
@@ -34,6 +34,14 @@ export default function IncidentsClient({ incidents }: IncidentsClientProps) {
     const { t } = useI18n()
     const [loadingId, setLoadingId] = useState<string | null>(null)
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            router.refresh()
+        }, 30000) // Refresh every 30 seconds
+
+        return () => clearInterval(interval)
+    }, [router])
+
     const handleStatusUpdate = async (id: string, status: any) => {
         setLoadingId(id)
         await updateIncidentStatus(id, status)
@@ -51,7 +59,6 @@ export default function IncidentsClient({ incidents }: IncidentsClientProps) {
             default: return 'bg-slate-500 hover:bg-slate-600'
         }
     }
-
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -63,7 +70,7 @@ export default function IncidentsClient({ incidents }: IncidentsClientProps) {
                     <CardTitle>{t('incidents.recentIncidents')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="rounded-md border bg-white">
+                    <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
                                 <TableRow>

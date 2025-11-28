@@ -9,9 +9,12 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useI18n } from '@/components/i18n-provider'
+import { LanguageSwitcher } from '@/components/language-switcher'
 
 export default function LoginPage() {
     const router = useRouter()
+    const { t } = useI18n()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -30,25 +33,28 @@ export default function LoginPage() {
             })
 
             if (result?.error) {
-                setError('Invalid username or password')
+                setError(t('login.invalidCredentials'))
                 setIsLoading(false)
             } else {
                 router.push('/dashboard')
                 router.refresh()
             }
         } catch (err) {
-            setError('Something went wrong. Please try again.')
+            setError(t('common.error'))
             setIsLoading(false)
         }
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 relative">
+            <div className="absolute top-4 right-4">
+                <LanguageSwitcher />
+            </div>
             <Card className="w-full max-w-md">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Staff Login</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-center">{t('login.title')}</CardTitle>
                     <CardDescription className="text-center">
-                        Enter your credentials to access the dashboard
+                        {t('login.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -56,12 +62,12 @@ export default function LoginPage() {
                         {error && (
                             <Alert variant="destructive">
                                 <AlertCircle className="h-4 w-4" />
-                                <AlertTitle>Error</AlertTitle>
+                                <AlertTitle>{t('common.error')}</AlertTitle>
                                 <AlertDescription>{error}</AlertDescription>
                             </Alert>
                         )}
                         <div className="space-y-2">
-                            <Label htmlFor="username">Username</Label>
+                            <Label htmlFor="username">{t('login.username')}</Label>
                             <Input
                                 id="username"
                                 type="text"
@@ -73,7 +79,7 @@ export default function LoginPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">{t('login.password')}</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -87,17 +93,17 @@ export default function LoginPage() {
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Signing in...
+                                    {t('login.signingIn')}
                                 </>
                             ) : (
-                                'Sign In'
+                                t('login.signIn')
                             )}
                         </Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <Button variant="link" className="text-sm text-slate-500" onClick={() => router.push('/')}>
-                        Back to Home
+                        {t('common.backToHome')}
                     </Button>
                 </CardFooter>
             </Card>

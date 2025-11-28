@@ -75,7 +75,7 @@ export default function IncidentTable({ incidents }: IncidentTableProps) {
                                     {incident.status}
                                 </Badge>
                             </TableCell>
-                            <TableCell>{new Date(incident.reportedAt).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(incident.reportedAt).toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' })}</TableCell>
                             <TableCell className="text-right">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>

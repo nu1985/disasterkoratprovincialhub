@@ -63,15 +63,15 @@ export async function submitReport(prevState: any, formData: FormData) {
         // 3. Find Incident Type (Mocking ID or creating if not exists for now, ideally seeded)
         // We'll assume we pass the code or name, but schema expects ID.
         // For MVP, let's try to find by code or create a dummy one.
-        let type = await prisma.incidentType.findFirst({ where: { code: incidentType } })
+        // 3. Find Incident Type
+        let type = await prisma.incidentType.findUnique({ where: { code: incidentType } })
         if (!type) {
-            // Create a default type if not found (just for safety in this MVP step)
-            type = await prisma.incidentType.create({
-                data: {
-                    code: incidentType,
-                    nameTh: incidentType, // Using the value as name
-                }
-            })
+            // Fallback to OTHER if specific type not found
+            type = await prisma.incidentType.findUnique({ where: { code: 'OTHER' } })
+        }
+
+        if (!type) {
+            return { success: false, message: "Invalid incident type configuration." }
         }
 
         // 4. Create Incident

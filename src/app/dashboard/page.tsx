@@ -2,7 +2,7 @@ import { getDashboardStats } from "./actions"
 import DashboardClient from "./dashboard-client"
 
 export default async function DashboardPage() {
-    const { success, stats, chartData } = await getDashboardStats()
+    const { success, stats, chartData, recentActivity } = await getDashboardStats()
 
     if (!success || !stats || !chartData) {
         return (
@@ -12,5 +12,5 @@ export default async function DashboardPage() {
         )
     }
 
-    return <DashboardClient stats={stats} chartData={chartData} />
+    return <DashboardClient stats={stats} chartData={chartData} recentActivity={recentActivity} />
 }

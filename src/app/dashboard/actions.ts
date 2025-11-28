@@ -38,6 +38,15 @@ export async function getDashboardStats() {
             }
         })
 
+        const recentActivity = await prisma.incident.findMany({
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            include: {
+                incidentType: true,
+                location: true
+            }
+        })
+
         return {
             success: true,
             stats: {
@@ -45,7 +54,8 @@ export async function getDashboardStats() {
                 active: activeIncidents,
                 completed: completedIncidents
             },
-            chartData
+            chartData,
+            recentActivity
         }
     } catch (error) {
         console.error("Failed to get dashboard stats:", error)

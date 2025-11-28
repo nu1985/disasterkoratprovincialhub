@@ -55,7 +55,9 @@ export default function UsersClient({ users, roles, orgs }: UsersClientProps) {
                                     <TableCell className="font-medium">{user.name}</TableCell>
                                     <TableCell>{user.username}</TableCell>
                                     <TableCell>
-                                        <Badge variant="outline">{user.role.name}</Badge>
+                                        <Badge variant="outline">
+                                            {t(`users.roles.${user.role.name}` as any) || user.role.name}
+                                        </Badge>
                                     </TableCell>
                                     <TableCell>{user.organization?.name || '-'}</TableCell>
                                     <TableCell>

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache"
 
 const assignmentSchema = z.object({
     incidentId: z.string().min(1, "Incident is required"),
-    resourceId: z.string().min(1, "Resource is required"),
+    resourceIds: z.array(z.string()).min(1, "At least one resource is required"),
 })
 
 export async function getAssignments() {
@@ -77,9 +77,12 @@ export async function getAvailableResources() {
 
 export async function createAssignment(prevState: any, formData: FormData) {
     try {
+        // Get all resourceId values from formData
+        const resourceIds = formData.getAll('resourceId') as string[];
+
         const validatedFields = assignmentSchema.safeParse({
             incidentId: formData.get('incidentId'),
-            resourceId: formData.get('resourceId'),
+            resourceIds: resourceIds,
         })
 
         if (!validatedFields.success) {
@@ -90,34 +93,30 @@ export async function createAssignment(prevState: any, formData: FormData) {
             }
         }
 
-        const { incidentId, resourceId } = validatedFields.data
+        const { incidentId, resourceIds: validResourceIds } = validatedFields.data
 
         // Transaction to create assignment and update resource status
         await prisma.$transaction(async (tx) => {
-            // 1. Get the resource to find its organization
-            const resource = await tx.resource.findUnique({ where: { id: resourceId } })
-            if (!resource) throw new Error("Resource not found")
+            // 1. Get the first resource to find its organization
+            const firstResource = await tx.resource.findUnique({ where: { id: validResourceIds[0] } })
+            if (!firstResource) throw new Error("Resource not found")
 
             // 2. Find a suitable Unit in the same organization (or create a default one)
-            // For simplicity, we'll try to find a 'RESPONSE_TEAM' unit or create one
             let unit = await tx.unit.findFirst({
                 where: {
-                    organizationId: resource.organizationId,
+                    organizationId: firstResource.organizationId,
                     unitType: 'RESPONSE_TEAM'
                 }
             })
 
             if (!unit) {
-                // Fallback: Create a temporary unit for this assignment if none exists
-                // Or find ANY unit
-                unit = await tx.unit.findFirst({ where: { organizationId: resource.organizationId } })
+                unit = await tx.unit.findFirst({ where: { organizationId: firstResource.organizationId } })
 
                 if (!unit) {
-                    // Create a default unit for the organization
                     unit = await tx.unit.create({
                         data: {
                             name: "General Unit",
-                            organizationId: resource.organizationId,
+                            organizationId: firstResource.organizationId,
                             unitType: 'GENERAL',
                             isActive: true
                         }
@@ -135,20 +134,21 @@ export async function createAssignment(prevState: any, formData: FormData) {
                 },
             })
 
-            // 4. Link the Resource to the Assignment
-            await tx.assignmentResource.create({
-                data: {
-                    assignmentId: assignment.id,
-                    resourceId: resource.id,
-                    quantity: 1
-                }
-            })
+            // 4. Link Resources to the Assignment and update their status
+            for (const resId of validResourceIds) {
+                await tx.assignmentResource.create({
+                    data: {
+                        assignmentId: assignment.id,
+                        resourceId: resId,
+                        quantity: 1
+                    }
+                })
 
-            // 5. Update resource status to IN_USE
-            await tx.resource.update({
-                where: { id: resourceId },
-                data: { status: 'IN_USE' },
-            })
+                await tx.resource.update({
+                    where: { id: resId },
+                    data: { status: 'IN_USE' },
+                })
+            }
         })
 
         revalidatePath('/dashboard/assignments')
@@ -157,5 +157,116 @@ export async function createAssignment(prevState: any, formData: FormData) {
     } catch (error) {
         console.error("Failed to create assignment:", error)
         return { success: false, message: 'Failed to create assignment' }
+    }
+}
+
+const updateAssignmentSchema = z.object({
+    id: z.string().min(1, "ID is required"),
+    incidentId: z.string().min(1, "Incident is required"),
+    resourceIds: z.array(z.string()).min(1, "At least one resource is required"),
+    status: z.enum(['PENDING', 'ASSIGNED', 'ON_SITE', 'COMPLETED', 'CANCELLED']),
+})
+
+export async function updateAssignment(prevState: any, formData: FormData) {
+    try {
+        const resourceIds = formData.getAll('resourceId') as string[];
+
+        const validatedFields = updateAssignmentSchema.safeParse({
+            id: formData.get('id'),
+            incidentId: formData.get('incidentId'),
+            resourceIds: resourceIds,
+            status: formData.get('status'),
+        })
+
+        if (!validatedFields.success) {
+            return {
+                success: false,
+                errors: validatedFields.error.flatten().fieldErrors,
+                message: "Invalid input",
+            }
+        }
+
+        const { id, incidentId, resourceIds: newResourceIds, status } = validatedFields.data
+
+        await prisma.$transaction(async (tx) => {
+            // 1. Get current assignment to check for changes
+            const currentAssignment = await tx.assignment.findUnique({
+                where: { id },
+                include: { resources: true }
+            })
+
+            if (!currentAssignment) throw new Error("Assignment not found")
+
+            const currentResourceIds = currentAssignment.resources.map(r => r.resourceId)
+
+            // 2. Handle Resource Changes
+
+            // Resources to remove: present in current but not in new
+            const toRemove = currentResourceIds.filter(rid => !newResourceIds.includes(rid))
+
+            // Resources to add: present in new but not in current
+            const toAdd = newResourceIds.filter(rid => !currentResourceIds.includes(rid))
+
+            // Remove old links and mark as AVAILABLE
+            if (toRemove.length > 0) {
+                await tx.resource.updateMany({
+                    where: { id: { in: toRemove } },
+                    data: { status: 'AVAILABLE' }
+                })
+
+                await tx.assignmentResource.deleteMany({
+                    where: {
+                        assignmentId: id,
+                        resourceId: { in: toRemove }
+                    }
+                })
+            }
+
+            // Add new links and mark as IN_USE
+            for (const resId of toAdd) {
+                await tx.assignmentResource.create({
+                    data: {
+                        assignmentId: id,
+                        resourceId: resId,
+                        quantity: 1
+                    }
+                })
+
+                await tx.resource.update({
+                    where: { id: resId },
+                    data: { status: 'IN_USE' },
+                })
+            }
+
+            // 3. Handle Status Change
+            // If status is COMPLETED or CANCELLED, release ALL resources
+            if (status === 'COMPLETED' || status === 'CANCELLED') {
+                await tx.resource.updateMany({
+                    where: { id: { in: newResourceIds } },
+                    data: { status: 'AVAILABLE' }
+                })
+            } else if (status !== 'COMPLETED' && status !== 'CANCELLED' && (currentAssignment.status === 'COMPLETED' || currentAssignment.status === 'CANCELLED')) {
+                // If moving FROM completed/cancelled TO active, mark resources as IN_USE again
+                await tx.resource.updateMany({
+                    where: { id: { in: newResourceIds } },
+                    data: { status: 'IN_USE' }
+                })
+            }
+
+            await tx.assignment.update({
+                where: { id },
+                data: {
+                    incidentId,
+                    status: status as any,
+                }
+            })
+        })
+
+        revalidatePath('/dashboard/assignments')
+        revalidatePath('/dashboard/resources')
+        return { success: true, message: 'Assignment updated successfully' }
+    } catch (error) {
+        console.error("Failed to update assignment:", error)
+        return { success: false, message: 'Failed to update assignment' }
     }
 }

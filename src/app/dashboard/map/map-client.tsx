@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useI18n } from '@/components/i18n-provider'
+import { CreateAssignmentDialog } from '../assignments/create-assignment-dialog'
 
 // Fix Leaflet icon issue in Next.js
 const icon = L.icon({
@@ -21,11 +22,15 @@ const icon = L.icon({
 
 interface MapClientProps {
     incidents: any[]
+    resources: any[]
+    userRole?: string
 }
 
-export default function MapClient({ incidents }: MapClientProps) {
+export default function MapClient({ incidents, resources, userRole }: MapClientProps) {
     const { t, language } = useI18n()
     const defaultCenter: [number, number] = [14.9799, 102.0978] // Korat City Center
+
+    const canAssign = userRole === 'ADMIN' || userRole === 'STAFF'
 
     return (
         <div className="space-y-6">
@@ -64,9 +69,19 @@ export default function MapClient({ incidents }: MapClientProps) {
                                         <p className="text-sm text-gray-600 mb-1">
                                             {incident.location.district}, {incident.location.province}
                                         </p>
-                                        <p className="text-xs text-gray-400">
+                                        <p className="text-xs text-gray-400 mb-3">
                                             {new Date(incident.createdAt).toLocaleString(language === 'th' ? 'th-TH' : 'en-US')}
                                         </p>
+
+                                        {canAssign && (
+                                            <div className="mt-2 pt-2 border-t">
+                                                <CreateAssignmentDialog
+                                                    incidents={incidents}
+                                                    resources={resources}
+                                                    defaultIncidentId={incident.id}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </Popup>
                             </Marker>

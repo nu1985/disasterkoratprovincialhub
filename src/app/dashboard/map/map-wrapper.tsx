@@ -7,6 +7,6 @@ const MapClient = dynamic(() => import('./map-client'), {
     loading: () => <div className="h-[600px] w-full bg-slate-100 animate-pulse rounded-lg flex items-center justify-center">Loading Map...</div>
 })
 
-export default function MapWrapper({ incidents }: { incidents: any[] }) {
-    return <MapClient incidents={incidents} />
+export default function MapWrapper({ incidents, resources, userRole }: { incidents: any[], resources: any[], userRole?: string }) {
+    return <MapClient incidents={incidents} resources={resources} userRole={userRole} />
 }

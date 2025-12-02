@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { CreateAssignmentDialog } from "./create-assignment-dialog"
+import { EditAssignmentDialog } from "./edit-assignment-dialog"
 import {
     Table,
     TableBody,
@@ -56,6 +57,7 @@ export default function AssignmentsClient({ assignments, incidents, resources }:
                                     <TableHead>{t('assignments.table.resource')}</TableHead>
                                     <TableHead>{t('assignments.table.status')}</TableHead>
                                     <TableHead>{t('assignments.table.assignedAt')}</TableHead>
+                                    <TableHead className="text-right">{t('common.actions') || "Actions"}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -84,11 +86,18 @@ export default function AssignmentsClient({ assignments, incidents, resources }:
                                             </Badge>
                                         </TableCell>
                                         <TableCell>{new Date(assignment.assignedAt).toLocaleString(language === 'th' ? 'th-TH' : 'en-US')}</TableCell>
+                                        <TableCell className="text-right">
+                                            <EditAssignmentDialog
+                                                assignment={assignment}
+                                                incidents={incidents || []}
+                                                resources={resources || []}
+                                            />
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                                 {(!assignments || assignments.length === 0) && (
                                     <TableRow>
-                                        <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                                        <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                                             No assignments found
                                         </TableCell>
                                     </TableRow>

@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useI18n } from "@/components/i18n-provider"
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
 import { useState } from "react"
 
@@ -134,6 +134,7 @@ export function DashboardSidebar({ mobile }: DashboardSidebarProps) {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="p-0 border-r-slate-800 w-72 bg-slate-900 text-white border-none">
+                    <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                     <SidebarContent />
                 </SheetContent>
             </Sheet>

@@ -1,92 +1,92 @@
-# Disaster Management System (Nakhon Ratchasima)
+# ระบบจัดการภัยพิบัติ (องค์การบริหารส่วนจังหวัดนครราชสีมา)
 
-A comprehensive web-based platform for managing disaster incidents, resources, and assignments for the Nakhon Ratchasima Provincial Administrative Organization.
+แพลตฟอร์มบนเว็บแบบครบวงจรสำหรับการจัดการเหตุภัยพิบัติ ทรัพยากร และการมอบหมายงาน สำหรับองค์การบริหารส่วนจังหวัดนครราชสีมา
 
-## Features
+## คุณสมบัติ
 
--   **Incident Reporting**: Report and track various types of disasters (Flood, Fire, etc.).
--   **Real-time Dashboard**: Live monitoring of incidents and statistics.
--   **Resource Management**: Track vehicles, equipment, and personnel.
--   **Assignment System**: Dispatch resources to specific incidents.
--   **Map Integration**: Visual representation of incidents on an interactive map.
--   **User Management**: Role-based access control (Admin, Staff, etc.).
--   **Bilingual Support**: Full Thai and English interface.
+-   **การรายงานเหตุ**: รายงานและติดตามภัยพิบัติประเภทต่างๆ (น้ำท่วม, ไฟไหม้, ฯลฯ)
+-   **แดชบอร์ดแบบเรียลไทม์**: ติดตามสถานการณ์และสถิติแบบสดๆ
+-   **การจัดการทรัพยากร**: ติดตามยานพาหนะ อุปกรณ์ และบุคลากร
+-   **ระบบมอบหมายงาน**: สั่งการทรัพยากรไปยังจุดเกิดเหตุ
+-   **แผนที่**: แสดงตำแหน่งเหตุการณ์บนแผนที่แบบโต้ตอบ
+-   **การจัดการผู้ใช้**: ควบคุมการเข้าถึงตามบทบาท (ผู้ดูแลระบบ, เจ้าหน้าที่, ฯลฯ)
+-   **รองรับสองภาษา**: ใช้งานได้ทั้งภาษาไทยและภาษาอังกฤษ
 
-## Tech Stack
+## เทคโนโลยีที่ใช้
 
 -   **Framework**: Next.js 14 (App Router)
--   **Database**: PostgreSQL with Prisma ORM
+-   **Database**: PostgreSQL พร้อม Prisma ORM
 -   **Authentication**: NextAuth.js
 -   **UI Library**: shadcn/ui + Tailwind CSS
 -   **Maps**: Leaflet / React-Leaflet
 
-## Getting Started
+## การเริ่มต้นใช้งาน
 
-### Prerequisites
+### สิ่งที่ต้องมี
 
 -   Node.js 18+
 -   PostgreSQL Database
 
-### Installation
+### การติดตั้ง
 
-1.  Clone the repository:
+1.  Clone repository:
     ```bash
     git clone https://github.com/your-repo/disaster-management-system.git
     cd disaster-management-system
     ```
 
-2.  Install dependencies:
+2.  ติดตั้ง dependencies:
     ```bash
     npm install
     ```
 
-3.  Set up environment variables:
-    -   Copy `.env.example` to `.env`
-    -   Update `DATABASE_URL` and `NEXTAUTH_SECRET`
+3.  ตั้งค่าตัวแปรสภาพแวดล้อม (Environment Variables):
+    -   คัดลอกไฟล์ `.env.example` ไปเป็น `.env`
+    -   แก้ไข `DATABASE_URL` และ `NEXTAUTH_SECRET`
 
-4.  Initialize the database:
+4.  เริ่มต้นฐานข้อมูล:
     ```bash
     npx prisma migrate dev
     npm run seed
     ```
 
-5.  Run the development server:
+5.  รันเซิร์ฟเวอร์สำหรับพัฒนา (Development Server):
     ```bash
     npm run dev
     ```
 
-6.  Open [http://localhost:3000](http://localhost:3000) in your browser.
+6.  เปิด [http://localhost:3000](http://localhost:3000) ในเบราว์เซอร์ของคุณ
 
-## Deployment
+## การนำไปใช้งานจริง (Deployment)
 
-### Standard Deployment
+### การติดตั้งแบบมาตรฐาน
 
-1.  Build the project:
+1.  Build โปรเจกต์:
     ```bash
     npm run build
     ```
 
-2.  Start the production server:
+2.  เริ่มเซิร์ฟเวอร์ Production:
     ```bash
     npm start
     ```
 
-### Docker Deployment (Recommended)
+### การติดตั้งด้วย Docker (แนะนำ)
 
-1.  Ensure Docker and Docker Compose are installed.
+1.  ตรวจสอบว่าติดตั้ง Docker และ Docker Compose แล้ว
 
-2.  Build and start the containers:
+2.  สร้างและเริ่ม Container:
     ```bash
     docker-compose -f docker-compose.prod.yml up -d --build
     ```
 
-3.  The application will be available at [http://localhost:3000](http://localhost:3000).
+3.  แอปพลิเคชันจะใช้งานได้ที่ [http://localhost:3000](http://localhost:3000)
 
-4.  To stop the containers:
+4.  หากต้องการหยุด Container:
     ```bash
     docker-compose -f docker-compose.prod.yml down
     ```
 
-## License
+## ลิขสิทธิ์
 
-This project is licensed under the MIT License.
+โปรเจกต์นี้อยู่ภายใต้สัญญาอนุญาต MIT License

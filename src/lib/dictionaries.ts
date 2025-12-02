@@ -134,6 +134,10 @@ export const en = {
             selectIncident: "Select Incident",
             selectResource: "Select Resource",
         },
+        edit: {
+            title: "Edit Assignment",
+            description: "Update assignment details.",
+        },
         table: {
             incident: "Incident",
             resource: "Resource",
@@ -141,11 +145,14 @@ export const en = {
             assignedAt: "Assigned At",
         },
         statuses: {
+            PENDING: "Pending",
             ASSIGNED: "Assigned",
             ACCEPTED: "Accepted",
             REJECTED: "Rejected",
             IN_PROGRESS: "In Progress",
+            ON_SITE: "On Site",
             COMPLETED: "Completed",
+            CANCELLED: "Cancelled",
         }
     },
     incidentDetail: {
@@ -338,6 +345,10 @@ export const th: Dictionary = {
             selectIncident: "เลือกเหตุการณ์",
             selectResource: "เลือกทรัพยากร",
         },
+        edit: {
+            title: "แก้ไขการมอบหมาย",
+            description: "อัปเดตรายละเอียดการมอบหมายงาน",
+        },
         table: {
             incident: "เหตุการณ์",
             resource: "ทรัพยากร",
@@ -345,11 +356,14 @@ export const th: Dictionary = {
             assignedAt: "เวลาที่มอบหมาย",
         },
         statuses: {
+            PENDING: "รอดำเนินการ",
             ASSIGNED: "มอบหมายแล้ว",
             ACCEPTED: "ตอบรับงาน",
             REJECTED: "ปฏิเสธงาน",
             IN_PROGRESS: "กำลังดำเนินการ",
+            ON_SITE: "ถึงสถานที่เกิดเหตุ",
             COMPLETED: "เสร็จสิ้น",
+            CANCELLED: "ยกเลิก",
         }
     },
     incidentDetail: {

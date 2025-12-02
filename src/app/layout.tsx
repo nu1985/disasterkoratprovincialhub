@@ -33,6 +33,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <I18nProvider>
+          {/* Provider for Internationalization */}
           {children}
           <Toaster />
         </I18nProvider>

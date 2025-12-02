@@ -24,3 +24,20 @@ export async function getIncidentsForMap() {
         return { incidents: [] }
     }
 }
+
+export async function getAvailableResources() {
+    try {
+        const resources = await prisma.resource.findMany({
+            where: {
+                status: 'AVAILABLE'
+            },
+            orderBy: {
+                name: 'asc'
+            }
+        })
+        return { resources }
+    } catch (error) {
+        console.error("Failed to fetch available resources:", error)
+        return { resources: [] }
+    }
+}

@@ -11,6 +11,8 @@ export const en = {
         actions: "Actions",
         status: "Status",
         createdAt: "Created At",
+        active: "Active",
+        inactive: "Inactive",
     },
     login: {
         title: "Staff Login",
@@ -222,6 +224,8 @@ export const th: Dictionary = {
         actions: "การจัดการ",
         status: "สถานะ",
         createdAt: "วันที่สร้าง",
+        active: "ใช้งานปกติ",
+        inactive: "ระงับการใช้งาน",
     },
     login: {
         title: "เข้าสู่ระบบเจ้าหน้าที่",

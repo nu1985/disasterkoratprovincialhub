@@ -137,7 +137,7 @@ export default function DashboardClient({ stats, chartData, recentActivity }: Da
                                             incident.status === 'DONE' ? 'text-green-500' :
                                                 'text-blue-500'
                                             }`}>
-                                            {incident.status}
+                                            {t(`incidents.statuses.${incident.status}`)}
                                         </div>
                                     </div>
                                 ))

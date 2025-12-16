@@ -92,7 +92,7 @@ export default function IncidentsClient({ incidents }: IncidentsClientProps) {
                                         <TableCell>{incident.location?.district}</TableCell>
                                         <TableCell>
                                             <Badge className={getStatusColor(incident.status)}>
-                                                {incident.status}
+                                                {t(`incidents.statuses.${incident.status}`)}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>{new Date(incident.reportedAt).toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' })}</TableCell>

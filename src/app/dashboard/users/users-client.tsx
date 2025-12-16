@@ -96,7 +96,7 @@ export default function UsersClient({ users, roles, orgs }: UsersClientProps) {
                                         <TableCell>{user.organization?.name || '-'}</TableCell>
                                         <TableCell>
                                             <Badge className={user.isActive ? 'bg-green-500' : 'bg-gray-500'}>
-                                                {user.isActive ? 'Active' : 'Inactive'}
+                                                {user.isActive ? t('common.active') : t('common.inactive')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>{new Date(user.createdAt).toLocaleDateString(language === 'th' ? 'th-TH' : 'en-US')}</TableCell>

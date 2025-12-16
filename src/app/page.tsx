@@ -106,7 +106,10 @@ export default async function Home() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto">
-              ระบบศูนย์กลางสำหรับการแจ้งเหตุและติดตามสถานการณ์ภัยพิบัติ เชื่อมโยงข้อมูล รวดเร็ว โปร่งใส
+              ระบบศูนย์กลางสำหรับการแจ้งเหตุและติดตามสถานการณ์ภัยพิบัติ
+            </p>
+            <p className="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto">
+              เชื่อมโยงข้อมูล รวดเร็ว โปร่งใส
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/report">
@@ -194,7 +197,7 @@ export default async function Home() {
               <h4 className="font-bold text-white mb-4">ติดต่อ</h4>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2"><Phone className="h-4 w-4" /> 1567 (สายด่วน)</li>
-                <li className="flex items-center gap-2"><Phone className="h-4 w-4" /> 044-xxx-xxx (สำนักงาน)</li>
+                <li className="flex items-center gap-2"><Phone className="h-4 w-4" /> 044-243-878 (สำนักงาน)</li>
               </ul>
             </div>
           </div>

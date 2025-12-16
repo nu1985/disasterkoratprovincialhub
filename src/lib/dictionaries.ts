@@ -45,6 +45,12 @@ export const en = {
             logout: "Logout",
         }
     },
+    settings: {
+        header: "General Settings",
+        description: "Manage your application preferences.",
+        language: "Language",
+        languageDescription: "Select your preferred language for the interface.",
+    },
     report: {
         title: "Report Incident",
         description: "Report a new incident to the center",
@@ -257,6 +263,12 @@ export const th: Dictionary = {
             settings: "ตั้งค่า",
             logout: "ออกจากระบบ",
         }
+    },
+    settings: {
+        header: "การตั้งค่าทั่วไป",
+        description: "จัดการการตั้งค่าการใช้งานของคุณ",
+        language: "ภาษา",
+        languageDescription: "เลือกภาษาที่ต้องการแสดงผลในระบบ",
     },
     report: {
         title: "แจ้งเหตุสาธารณภัย",

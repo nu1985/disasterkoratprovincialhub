@@ -14,15 +14,15 @@ export default function SettingsPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>General Settings</CardTitle>
-                    <CardDescription>Manage your application preferences.</CardDescription>
+                    <CardTitle>{t('settings.header')}</CardTitle>
+                    <CardDescription>{t('settings.description')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
-                            <Label>Language</Label>
+                            <Label>{t('settings.language')}</Label>
                             <p className="text-sm text-muted-foreground">
-                                Select your preferred language for the interface.
+                                {t('settings.languageDescription')}
                             </p>
                         </div>
                         <LanguageSwitcher />

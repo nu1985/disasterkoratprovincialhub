@@ -235,7 +235,7 @@ export default function IncidentDetailClient({ incident, currentUser }: Incident
                             <CardTitle>{t('incidentDetail.mapLocation')}</CardTitle>
                         </CardHeader>
                         <CardContent className="p-0 overflow-hidden h-64">
-                            <MapWrapper incidents={mapIncidents} />
+                            <MapWrapper incidents={mapIncidents} resources={[]} />
                         </CardContent>
                     </Card>
                 </div>

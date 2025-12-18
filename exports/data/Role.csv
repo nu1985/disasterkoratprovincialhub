@@ -1,0 +1,5 @@
+id,name,description
+1867cb06-349f-4195-8c2a-e69706f1db2c,ADMIN,Role for ADMIN
+9efd0e88-0854-4a2d-aee2-5d2f7c7d3f96,STAFF,Role for STAFF
+94d08de1-5a58-4a7c-916d-07512af1a4a8,VOLUNTEER,Role for VOLUNTEER
+8ba81b2e-878c-40c3-8589-ec2c9e840d87,COORDINATOR,Coordinator for managing resources

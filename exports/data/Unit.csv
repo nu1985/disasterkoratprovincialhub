@@ -1,0 +1,7 @@
+id,organizationId,name,unitType,contactChannel,isActive
+376cc0b1-7a30-4501-9a64-a0c9cc356b6c,2e5f8282-e72f-497e-a48a-4697388c95a4,หน่วยเคลื่อนที่เร็ว 1,RESPONSE_TEAM,,TRUE
+98eac444-ce10-46ac-86aa-3979dc3af503,2e5f8282-e72f-497e-a48a-4697388c95a4,หน่วยกู้ภัยสว่างเมตตา,RESPONSE_TEAM,,TRUE
+35ad4e97-1e47-47a2-a18c-375c85bd502c,2e5f8282-e72f-497e-a48a-4697388c95a4,หน่วยดับเพลิงเทศบาล,RESPONSE_TEAM,,TRUE
+73fcb103-e5ab-460a-8394-8b0d278b94d3,2e5f8282-e72f-497e-a48a-4697388c95a4,ทีมแพทย์ฉุกเฉิน รพ.มหาราช,RESPONSE_TEAM,,TRUE
+7e40ce1d-cca2-43cf-b31c-dc7a2094263a,2e5f8282-e72f-497e-a48a-4697388c95a4,หน่วยบรรเทาทุกข์เคลื่อนที่,RESPONSE_TEAM,,TRUE
+407fb2a0-94c7-40fe-b922-ae39292c8322,default-org-id,General Unit,GENERAL,,TRUE

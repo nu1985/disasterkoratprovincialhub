@@ -1,0 +1,10 @@
+id,organizationId,name,resourceType,capacity,status,locationId
+9db6a0e0-3a24-4cf9-ade0-b55bac921b69,2e5f8282-e72f-497e-a48a-4697388c95a4,รถพยาบาลฉุกเฉิน 01,VEHICLE,100,IN_USE,
+812d9a73-eeb1-498f-ae5c-bf64709bb761,2e5f8282-e72f-497e-a48a-4697388c95a4,ชุดปฐมพยาบาลเบื้องต้น,SUPPLIES,100,IN_USE,
+1d784e6f-44ce-4286-b041-544c3294eed2,2e5f8282-e72f-497e-a48a-4697388c95a4,ถุงยังชีพ 100 ชุด,SUPPLIES,100,IN_USE,
+aef5d300-7c9c-4845-babd-712465b735ff,2e5f8282-e72f-497e-a48a-4697388c95a4,โดรนสำรวจ,EQUIPMENT,100,IN_USE,
+8762020b-8c06-47bb-9499-a9493f2c91db,2e5f8282-e72f-497e-a48a-4697388c95a4,รถกระบะยกสูง,VEHICLE,100,IN_USE,
+a8c08144-d68f-4949-9254-607cbe9a891f,2e5f8282-e72f-497e-a48a-4697388c95a4,รถดับเพลิง 05,VEHICLE,100,IN_USE,
+d95244e6-d9a0-47ab-9dd3-dd9c034b53ee,default-org-id,Rescue Boat 1,VEHICLE,,IN_USE,
+475e7794-c7ab-413f-8b65-ec1d784f7b04,2e5f8282-e72f-497e-a48a-4697388c95a4,เครื่องสูบน้ำขนาดใหญ่,EQUIPMENT,100,IN_USE,
+cdbe5d9c-70d6-44e1-a0d3-d003dc281d97,2e5f8282-e72f-497e-a48a-4697388c95a4,เรือท้องแบน,VEHICLE,100,IN_USE,

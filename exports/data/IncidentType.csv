@@ -1,0 +1,7 @@
+id,code,nameTh,nameEn,description
+a1c87153-3c88-435b-a66a-393a57d93ac7,FLOOD,น้ำท่วม,Flood,
+a04ad007-1161-4886-972f-44a20a980caf,FIRE,อัคคีภัย,Fire,
+2042df95-0845-42c0-9ded-32b104282728,STORM,วาตภัย,Storm,
+e887d256-c50d-425f-9104-72d56e48d144,DROUGHT,ภัยแล้ง,Drought,
+88afb42b-ec8c-4cc3-badb-1ef656ad4925,ACCIDENT,อุบัติเหตุ,Accident,
+6a2a462e-2e96-4b91-b3de-46c89f1cf3de,OTHER,อื่นๆ,Other,

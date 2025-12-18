@@ -60,4 +60,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session: {
         strategy: "jwt",
     },
+    pages: {
+        signOut: "/auth/signout",
+        signIn: "/login", // Explicitly setting this too since we saw a login folder
+    },
 })

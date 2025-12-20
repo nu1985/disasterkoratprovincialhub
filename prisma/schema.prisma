@@ -1,53 +1,50 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "windows"]
 }
 
 datasource db {
   provider = "postgresql"
-
   url      = env("DATABASE_URL")
 }
 
 model Incident {
-  id                    String    @id @default(uuid())
-  externalReferenceCode String?   @map("external_reference_code")
+  id                    String                  @id @default(uuid())
+  externalReferenceCode String?                 @map("external_reference_code")
   title                 String
   description           String?
-  incidentTypeId        String    @map("incident_type_id")
-  severity              Severity  @default(LOW)
-  status                IncidentStatus @default(NEW)
-  reportedAt            DateTime  @default(now()) @map("reported_at")
-  occurredAt            DateTime? @map("occurred_at")
-  locationId            String?   @map("location_id")
+  incidentTypeId        String                  @map("incident_type_id")
+  severity              Severity                @default(LOW)
+  status                IncidentStatus          @default(NEW)
+  reportedAt            DateTime                @default(now()) @map("reported_at")
+  occurredAt            DateTime?               @map("occurred_at")
+  locationId            String?                 @map("location_id")
   latitude              Float?
   longitude             Float?
-  reporterId            String?   @map("reporter_id")
-  sourceChannelId       String?   @map("source_channel_id")
-  createdByUserId       String?   @map("created_by_user_id")
-  syncKey               String?   @unique @map("sync_key")
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
-
-  incidentType          IncidentType @relation(fields: [incidentTypeId], references: [id])
-  location              Location?    @relation(fields: [locationId], references: [id])
-  reporter              Reporter?    @relation(fields: [reporterId], references: [id])
-  sourceChannel         Channel?     @relation(fields: [sourceChannelId], references: [id])
-  createdByUser         User?        @relation(fields: [createdByUserId], references: [id])
-  
-  statusHistory         IncidentStatusHistory[]
+  reporterId            String?                 @map("reporter_id")
+  sourceChannelId       String?                 @map("source_channel_id")
+  createdByUserId       String?                 @map("created_by_user_id")
+  syncKey               String?                 @unique @map("sync_key")
+  createdAt             DateTime                @default(now()) @map("created_at")
+  updatedAt             DateTime                @updatedAt @map("updated_at")
   assignments           Assignment[]
   attachments           Attachment[]
+  statusHistory         IncidentStatusHistory[]
+  createdByUser         User?                   @relation(fields: [createdByUserId], references: [id])
+  incidentType          IncidentType            @relation(fields: [incidentTypeId], references: [id])
+  location              Location?               @relation(fields: [locationId], references: [id])
+  reporter              Reporter?               @relation(fields: [reporterId], references: [id])
+  sourceChannel         Channel?                @relation(fields: [sourceChannelId], references: [id])
   syncEvents            SyncEvent[]
 
   @@map("incidents")
 }
 
 model IncidentType {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  nameTh      String   @map("name_th")
-  nameEn      String?  @map("name_en")
+  id          String     @id @default(uuid())
+  code        String     @unique
+  nameTh      String     @map("name_th")
+  nameEn      String?    @map("name_en")
   description String?
   incidents   Incident[]
 
@@ -55,12 +52,12 @@ model IncidentType {
 }
 
 model Location {
-  id          String   @id @default(uuid())
+  id          String     @id @default(uuid())
   province    String
   district    String
   subdistrict String
-  addressText String?  @map("address_text")
-  postalCode  String?  @map("postal_code")
+  addressText String?    @map("address_text")
+  postalCode  String?    @map("postal_code")
   geocode     String?
   latitude    Float?
   longitude   Float?
@@ -71,77 +68,73 @@ model Location {
 }
 
 model Reporter {
-  id               String   @id @default(uuid())
+  id               String     @id @default(uuid())
   name             String?
   phone            String?
-  lineId           String?  @map("line_id")
-  facebookId       String?  @map("facebook_id")
-  preferredChannel String?  @map("preferred_channel")
-  isAnonymous      Boolean  @default(false) @map("is_anonymous")
-  createdAt        DateTime @default(now()) @map("created_at")
+  lineId           String?    @map("line_id")
+  facebookId       String?    @map("facebook_id")
+  preferredChannel String?    @map("preferred_channel")
+  isAnonymous      Boolean    @default(false) @map("is_anonymous")
+  createdAt        DateTime   @default(now()) @map("created_at")
   incidents        Incident[]
 
   @@map("reporters")
 }
 
 model Organization {
-  id            String   @id @default(uuid())
-  name          String
-  type          String
-  parentOrgId   String?  @map("parent_org_id")
-  contactPhone  String?  @map("contact_phone")
-  contactAddress String? @map("contact_address")
-  
-  parentOrg     Organization?  @relation("OrgHierarchy", fields: [parentOrgId], references: [id])
-  childOrgs     Organization[] @relation("OrgHierarchy")
-  units         Unit[]
-  users         User[]
-  resources     Resource[]
+  id             String         @id @default(uuid())
+  name           String
+  type           String
+  parentOrgId    String?        @map("parent_org_id")
+  contactPhone   String?        @map("contact_phone")
+  contactAddress String?        @map("contact_address")
+  parentOrg      Organization?  @relation("OrgHierarchy", fields: [parentOrgId], references: [id])
+  childOrgs      Organization[] @relation("OrgHierarchy")
+  resources      Resource[]
+  units          Unit[]
+  users          User[]
 
   @@map("organizations")
 }
 
 model Unit {
-  id             String   @id @default(uuid())
-  organizationId String   @map("organization_id")
+  id             String       @id @default(uuid())
+  organizationId String       @map("organization_id")
   name           String
-  unitType       String?  @map("unit_type")
-  contactChannel String?  @map("contact_channel")
-  isActive       Boolean  @default(true) @map("is_active")
-  
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  unitType       String?      @map("unit_type")
+  contactChannel String?      @map("contact_channel")
+  isActive       Boolean      @default(true) @map("is_active")
   assignments    Assignment[]
+  organization   Organization @relation(fields: [organizationId], references: [id])
 
   @@map("units")
 }
 
 model User {
-  id             String   @id @default(uuid())
-  name           String
-  email          String?  @unique
-  username       String?  @unique
-  phone          String?
-  passwordHash   String?  @map("password_hash")
-  roleId         String   @map("role_id")
-  organizationId String?  @map("organization_id")
-  isActive       Boolean  @default(true) @map("is_active")
-  createdAt      DateTime @default(now()) @map("created_at")
-  lastLoginAt    DateTime? @map("last_login_at")
-
-  role           Role          @relation(fields: [roleId], references: [id])
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  
-  createdIncidents Incident[]
-  statusChanges    IncidentStatusHistory[]
+  id                  String                  @id @default(uuid())
+  name                String
+  email               String?                 @unique
+  username            String?                 @unique
+  phone               String?
+  passwordHash        String?                 @map("password_hash")
+  roleId              String                  @map("role_id")
+  organizationId      String?                 @map("organization_id")
+  isActive            Boolean                 @default(true) @map("is_active")
+  createdAt           DateTime                @default(now()) @map("created_at")
+  lastLoginAt         DateTime?               @map("last_login_at")
   assignedAssignments Assignment[]
   uploadedAttachments Attachment[]
+  statusChanges       IncidentStatusHistory[]
+  createdIncidents    Incident[]
+  organization        Organization?           @relation(fields: [organizationId], references: [id])
+  role                Role                    @relation(fields: [roleId], references: [id])
 
   @@map("users")
 }
 
 model Role {
-  id          String   @id @default(uuid())
-  name        String   @unique
+  id          String  @id @default(uuid())
+  name        String  @unique
   description String?
   users       User[]
 
@@ -149,63 +142,58 @@ model Role {
 }
 
 model IncidentStatusHistory {
-  id              String   @id @default(uuid())
-  incidentId      String   @map("incident_id")
+  id              String          @id @default(uuid())
+  incidentId      String          @map("incident_id")
   oldStatus       IncidentStatus? @map("old_status")
   newStatus       IncidentStatus  @map("new_status")
-  changedAt       DateTime @default(now()) @map("changed_at")
-  changedByUserId String?  @map("changed_by_user_id")
+  changedAt       DateTime        @default(now()) @map("changed_at")
+  changedByUserId String?         @map("changed_by_user_id")
   note            String?
-
-  incident        Incident @relation(fields: [incidentId], references: [id])
-  changedByUser   User?    @relation(fields: [changedByUserId], references: [id])
+  changedByUser   User?           @relation(fields: [changedByUserId], references: [id])
+  incident        Incident        @relation(fields: [incidentId], references: [id])
 
   @@map("incident_status_history")
 }
 
 model Assignment {
-  id               String   @id @default(uuid())
-  incidentId       String   @map("incident_id")
-  unitId           String   @map("unit_id")
-  assignedByUserId String?  @map("assigned_by_user_id")
-  assignedAt       DateTime @default(now()) @map("assigned_at")
-  acceptedAt       DateTime? @map("accepted_at")
-  completedAt      DateTime? @map("completed_at")
-  status           AssignmentStatus @default(ASSIGNED)
+  id               String               @id @default(uuid())
+  incidentId       String               @map("incident_id")
+  unitId           String               @map("unit_id")
+  assignedByUserId String?              @map("assigned_by_user_id")
+  assignedAt       DateTime             @default(now()) @map("assigned_at")
+  acceptedAt       DateTime?            @map("accepted_at")
+  completedAt      DateTime?            @map("completed_at")
+  status           AssignmentStatus     @default(ASSIGNED)
   note             String?
-
-  incident         Incident @relation(fields: [incidentId], references: [id])
-  unit             Unit     @relation(fields: [unitId], references: [id])
-  assignedByUser   User?    @relation(fields: [assignedByUserId], references: [id])
-  
   resources        AssignmentResource[]
+  assignedByUser   User?                @relation(fields: [assignedByUserId], references: [id])
+  incident         Incident             @relation(fields: [incidentId], references: [id])
+  unit             Unit                 @relation(fields: [unitId], references: [id])
   attachments      Attachment[]
 
   @@map("assignments")
 }
 
 model Resource {
-  id             String   @id @default(uuid())
-  organizationId String   @map("organization_id")
+  id             String               @id @default(uuid())
+  organizationId String               @map("organization_id")
   name           String
-  resourceType   String   @map("resource_type")
+  resourceType   String               @map("resource_type")
   capacity       Float?
-  status         ResourceStatus @default(AVAILABLE)
-  locationId     String?  @map("location_id")
-
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  location       Location?    @relation(fields: [locationId], references: [id])
+  status         ResourceStatus       @default(AVAILABLE)
+  locationId     String?              @map("location_id")
   assignments    AssignmentResource[]
+  location       Location?            @relation(fields: [locationId], references: [id])
+  organization   Organization         @relation(fields: [organizationId], references: [id])
 
   @@map("resources")
 }
 
 model AssignmentResource {
-  id           String   @id @default(uuid())
-  assignmentId String   @map("assignment_id")
-  resourceId   String   @map("resource_id")
+  id           String     @id @default(uuid())
+  assignmentId String     @map("assignment_id")
+  resourceId   String     @map("resource_id")
   quantity     Float
-
   assignment   Assignment @relation(fields: [assignmentId], references: [id])
   resource     Resource   @relation(fields: [resourceId], references: [id])
 
@@ -213,56 +201,54 @@ model AssignmentResource {
 }
 
 model Attachment {
-  id              String   @id @default(uuid())
-  incidentId      String   @map("incident_id")
-  assignmentId    String?  @map("assignment_id")
-  fileUrl         String   @map("file_url")
-  fileType        String   @map("file_type")
-  uploadedByUserId String? @map("uploaded_by_user_id")
-  createdAt       DateTime @default(now()) @map("created_at")
-
-  incident        Incident @relation(fields: [incidentId], references: [id])
-  assignment      Assignment? @relation(fields: [assignmentId], references: [id])
-  uploadedByUser  User?    @relation(fields: [uploadedByUserId], references: [id])
+  id               String      @id @default(uuid())
+  incidentId       String      @map("incident_id")
+  assignmentId     String?     @map("assignment_id")
+  fileUrl          String      @map("file_url")
+  fileType         String      @map("file_type")
+  uploadedByUserId String?     @map("uploaded_by_user_id")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  assignment       Assignment? @relation(fields: [assignmentId], references: [id])
+  incident         Incident    @relation(fields: [incidentId], references: [id])
+  uploadedByUser   User?       @relation(fields: [uploadedByUserId], references: [id])
 
   @@map("attachments")
 }
 
 model Channel {
-  id         String   @id @default(uuid())
+  id         String     @id @default(uuid())
   name       String
   type       String
-  configJson Json?    @map("config_json")
+  configJson Json?      @map("config_json")
   incidents  Incident[]
 
   @@map("channels")
 }
 
 model SyncEndpoint {
-  id         String   @id @default(uuid())
+  id         String        @id @default(uuid())
   name       String
   direction  SyncDirection
   url        String
-  authType   String?  @map("auth_type")
-  configJson Json?    @map("config_json")
-  lastSyncAt DateTime? @map("last_sync_at")
+  authType   String?       @map("auth_type")
+  configJson Json?         @map("config_json")
+  lastSyncAt DateTime?     @map("last_sync_at")
   syncEvents SyncEvent[]
 
   @@map("sync_endpoints")
 }
 
 model SyncEvent {
-  id             String   @id @default(uuid())
-  syncEndpointId String   @map("sync_endpoint_id")
-  incidentId     String   @map("incident_id")
-  eventType      String   @map("event_type")
-  payloadJson    Json?    @map("payload_json")
-  status         SyncStatus @default(PENDING)
-  lastError      String?  @map("last_error")
-  createdAt      DateTime @default(now()) @map("created_at")
-
-  syncEndpoint   SyncEndpoint @relation(fields: [syncEndpointId], references: [id])
+  id             String       @id @default(uuid())
+  syncEndpointId String       @map("sync_endpoint_id")
+  incidentId     String       @map("incident_id")
+  eventType      String       @map("event_type")
+  payloadJson    Json?        @map("payload_json")
+  status         SyncStatus   @default(PENDING)
+  lastError      String?      @map("last_error")
+  createdAt      DateTime     @default(now()) @map("created_at")
   incident       Incident     @relation(fields: [incidentId], references: [id])
+  syncEndpoint   SyncEndpoint @relation(fields: [syncEndpointId], references: [id])
 
   @@map("sync_events")
 }

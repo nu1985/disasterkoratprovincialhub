@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Severity, IncidentStatus } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -264,7 +264,6 @@ async function main() {
     for (let i = 1; i <= 10; i++) {
         const randomIncident = getRandomItem(allIncidents)
         const randomUnit = getRandomItem(unitIds)
-        // Check duplication? assignment has no unique constraint on incidentId+unitId here but logic wise better to just create
         await prisma.assignment.create({
             data: {
                 incidentId: randomIncident.id,
@@ -274,9 +273,6 @@ async function main() {
                 assignedAt: new Date(),
             }
         })
-
-        // Also attach a resource to this assignment? (AssignmentResource)
-        // Need assignment id, so better do it after creation
     }
 
     // Create 10 Attachments
@@ -307,6 +303,62 @@ async function main() {
         })
     }
 
+    // 15. Create EXTRA Sample data for the user request (10 items each)
+    console.log('Creating 10 extra incidents...')
+    const extraIncidentTitles = [
+        'ท่อประปาแตกบริเวณสี่แยก', 'พบสัตว์ขาปล้องมีพิษในอาคาร', 'น้ำประปาไหลอ่อนหลายพื้นที่',
+        'พบคราบน้ำมันบนผิวจราจร', 'สายไฟพาดผ่านกิ่งไม้ใกล้อาคาร', 'กลิ่นเหม็นจากกองขยะไม่พึงประสงค์',
+        'ไฟฟ้าส่องสว่างดับหลายจุด', 'พบหลุมยุบบนฟุตบาท', 'ป้ายโฆษณาชำรุดเสี่ยงล้ม', 'ระบายน้ำอุดตันที่ตลาดสด'
+    ]
+    const extraIncidentIds = []
+    for (let i = 0; i < 10; i++) {
+        const type = getRandomItem(types)
+        const locationId = getRandomItem(locationIds)
+        const incident = await prisma.incident.create({
+            data: {
+                title: extraIncidentTitles[i] || `แจ้งเหตุพิเศษที่ ${i + 1}`,
+                description: `รายละเอียดเพิ่มเติมเหตุพิเศษที่ ${i + 1}`,
+                incidentTypeId: type.id,
+                severity: getRandomItem(['LOW', 'MEDIUM', 'HIGH'] as Severity[]),
+                status: getRandomItem(['NEW', 'VALIDATING', 'ASSIGNED', 'IN_PROGRESS'] as IncidentStatus[]),
+                locationId: locationId,
+                createdByUserId: getRandomItem(userIds),
+            }
+        })
+        extraIncidentIds.push(incident.id)
+    }
+
+    console.log('Creating 10 extra resources...')
+    const extraResourceNames = [
+        'รถบรรทุกน้ำขนาดใหญ่', 'เครื่องสูบน้ำแรงดันสูง', 'เลื่อยยนต์ตัดไม้', 'ชุดปฐมพยาบาลเคลื่อนที่',
+        'เรือเจ็ทสกีช่วยชีวิต', 'รถกระบะกู้ภัย 4x4', 'โดรนสำรวจความเสียหาย', 'เชือกช่วยชีวิตและรอก',
+        'บันไดอลูมิเนียมยืดหดได้', 'วิทยุสื่อสารไอคอม'
+    ]
+    for (let i = 0; i < 10; i++) {
+        await prisma.resource.create({
+            data: {
+                name: extraResourceNames[i],
+                resourceType: i % 2 === 0 ? 'VEHICLE' : 'EQUIPMENT',
+                capacity: 10 + i,
+                organizationId: getRandomItem(orgIds),
+                locationId: getRandomItem(locationIds),
+                status: 'AVAILABLE'
+            }
+        })
+    }
+
+    console.log('Creating 10 extra assignments...')
+    for (let i = 0; i < 10; i++) {
+        await prisma.assignment.create({
+            data: {
+                incidentId: getRandomItem(extraIncidentIds),
+                unitId: getRandomItem(unitIds),
+                status: 'ASSIGNED',
+                note: `งานมอบหมายพิเศษลำดับที่ ${i + 1}`,
+                assignedAt: new Date(),
+            }
+        })
+    }
 }
 
 main()
